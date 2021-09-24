@@ -4,8 +4,6 @@ from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackContext, MessageHandler, Filters
 #from dotenv import load_dotenv
 
-TOKEN = '2030294717:AAHT1K9GSqCM_U1xEMRs8eYN1doY1Cltbzk'
-
 
 def start(update, context):
     context.bot.send_message(
