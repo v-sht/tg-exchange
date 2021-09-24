@@ -73,11 +73,26 @@ def message_handler(update, context):
             reply_markup=create_menu())    
 
 
+def photo_handler(update, context):
+    user_id = update.message.from_user.id # получаем user_id
+    os.makedirs(str(user_id), exist_ok=True) # создаем категорию по user_id
+    print(user_id)
+    photo = update.message.photo[-1].get_file() # получаем фотку
+    path = '{0}/{1}.jpg'.format(user_id, photo.file_unique_id) # путь к фотке
+    print(photo.file_path)
+    photo.download(path) # сохраняем фотку
+    context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text='Фотография загружена. А теперь отправьте название вещи.',
+            reply_markup=create_menu()
+        )
+
+
 updater = Updater(TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(MessageHandler(filters=Filters.text, callback=message_handler))
-# dispatcher.add_handler(MessageHandler(filters=Filters.document, callback=photo_handler))
+dispatcher.add_handler(MessageHandler(filters=Filters.photo, callback=photo_handler))
 
 updater.start_polling()
 updater.idle()
